@@ -10,6 +10,7 @@ class BaseModel():
     
     def __init__(self):
         self.model = tf.keras.models.load_model('./model')
+        
     
     def predict_merger_prob(self, X, normalise=True):
         """
@@ -46,9 +47,7 @@ class BaseModel():
         """
         Inputs
         --------
-        X: numpy array - dimensions (N, 96, 96, 2)
-            - channel 1 is simulated Compton-y map
-            - channel 2 is simulated X-ray flux (0.1-15 keV)
+        X: numpy array - dimensions (N, 96, 96, 1)
             
         Output
         --------
@@ -60,7 +59,7 @@ class BaseModel():
         std_xr = np.std(X)
         
         X = (X - mean_xr) / std_xr
-        
+       
         return X
     
 
@@ -89,8 +88,8 @@ class BaseModel():
         if resize:
             xr_img = cv2.resize(xr_img, dsize=(96, 96), interpolation=cv2.INTER_AREA)
                      
-        npx = X.shape[1]
-        X = X.reshape((-1,npx,npx))
+        npx = xr_img.shape[1]
+        X = xr_img.reshape((-1,npx,npx))
         
         return X
 
